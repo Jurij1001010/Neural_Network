@@ -33,7 +33,7 @@ public class Neuron{
         this.neuron_next_number = neuron_next_number;
         weights = new double[neuron_next_number];
 
-        setWeightsToOne();
+        //setWeightsToOne();
         if(neuron_next_number!=0) {
             setNewWeights();
             setNewBias();

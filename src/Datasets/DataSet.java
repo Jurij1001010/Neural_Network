@@ -1,5 +1,9 @@
 package Datasets;
 
+import Datasets.Functions.Function;
+import Datasets.Inputs.Input;
+
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -17,34 +21,65 @@ public class DataSet {
     public static int min = -10;
     public static int max = 10;
 
+    public Function[] functions;
+    private Input[] inputs;
+
     private static final Random rand = new Random();
 
-    public DataSet(int dataset_length, int input_neurons_number, int output_neurons_number, int batch_size){
-        this.dataset_length = dataset_length;
-        data = new double[dataset_length][input_neurons_number];
-        results = new double[dataset_length][output_neurons_number];
-        this.batch_size = batch_size;
+    int function_pointer = 0;
 
-        createDataSet();
+    public DataSet(int dataset_length, Input[] inputs, Function[] functions, int batch_size){
+        this.dataset_length = dataset_length;
+        this.input_neuron_number = inputs.length;
+        this.functions = functions;
+        this.output_neuron_number = functions.length+1;
+        this.batch_size = batch_size;
+        this.inputs = inputs;
+
+        data = new double[dataset_length][this.input_neuron_number];
+        results = new double[dataset_length][this.output_neuron_number];
     }
 
     public void createDataSet(){
 
-
-        for (int i = 0; i < dataset_length; i+=2) {
-            data[i] = getPointFxIn();
-            data[i+1] = getPointFxOut();
-            //System.out.println(x+" "+y);
-            results[i] = fx(data[i][0], data[i][1]);
-            results[i+1] = fx(data[i+1][0], data[i+1][1]);
-
-            //System.out.println(Arrays.toString(data[i]) +" "+ Arrays.toString(results[i]));
-            //System.out.println(Arrays.toString(data[i+1]) +" "+ Arrays.toString(results[i+1]));
+        for (int i = 0; i < dataset_length; i++) {
+            data[i] = getData();
+            results[i] = getResults(data[i]);
+            function_pointer++;
         }
         shuffleDataset();
         System.out.println();
     }
 
+    public double[] getData(){
+        double[] output = getPointFxOut(functions[0]);
+        if(function_pointer==output_neuron_number-1){
+            for(int i = 0;i<output_neuron_number-1;i++){
+                if(functions[i].execute(output[0], output[1])){
+                    output = getPointFxOut(functions[i]);
+                    i = -1;
+                }
+            }
+            function_pointer = -1;
+            return output;
+        }
+
+        output = getPointFxIn(functions[function_pointer]);
+
+        return output;
+    }
+    public double[] getResults(double[] data){
+        double[] output = new double[output_neuron_number];
+        boolean in_fx = false;
+        for (int i = 0; i<output_neuron_number-1;i++){
+            if(functions[i].execute(data[0], data[1])){
+                output[i] = 1;
+                in_fx = true;
+            }
+        }
+        if(!in_fx) output[output.length-1] = 1;
+        return output;
+    }
     public Batch setRandomBatch(){
         Batch batch = new Batch(batch_size, input_neuron_number, output_neuron_number);
 
@@ -70,36 +105,27 @@ public class DataSet {
         return new double[][]{data[rand_d], results[rand_d]};
     }
 
-    public static double[] getPointFxIn(){
+    public double[] getPointFxIn(Function function){
+        double x = getRanDouble(min, max);
+        double y = function.execute(x);
+        while(Double.isNaN(y)||!function.execute(x,y)||y<min||y>max){
+
+            x = getRanDouble(min, max);
+            y = function.execute(x);
+        }
+
+        return makeInput(x, y);
+    }
+
+    public double[] getPointFxOut(Function function){
         double x = getRanDouble(min, max);
         double y = getRanDouble(min, max);
-        while(fx(x,y)[0]!=1){
+        while(function.execute(x,y)){
             x = getRanDouble(min, max);
             y = getRanDouble(min, max);
         }
-        return new double[]{x, y, x*x, y*y};
-
+        return makeInput(x, y);
     }
-    public static double[] getPointFxOut(){
-        double x = getRanDouble(min, max);
-        double y = getRanDouble(min, max);
-        while(fx(x,y)[0]!=0){
-            x = getRanDouble(min, max);
-            y = getRanDouble(min, max);
-        }
-        return new double[]{x, y, x*x, y*y};
-    }
-
-
-    public static double[] fx(double x, double y){
-        //boolean f = y>=5;
-        //boolean f = (2*x-5)<=y && y<=(2*x+5);
-
-        boolean f = x*x+y*y <25; // circle
-
-        return f?new double[]{1, 0}:new double[]{0, 1};
-    }
-
 
     public void shuffleDataset() {
         for (int i = 0; i < dataset_length; i++) {
@@ -113,6 +139,17 @@ public class DataSet {
             results[i] = temp_r;
         }
     }
+
+
+    public double[] makeInput(double x, double y){
+        double[] output = new double[input_neuron_number];
+
+        for(int i = 0; i <input_neuron_number;i++){
+            output[i] = inputs[i].execute(x, y);
+        }
+        return output;
+    }
+
 
     public static int getRanInt(int min, int max){
         return min + (int)(Math.random() * ((max - min)));

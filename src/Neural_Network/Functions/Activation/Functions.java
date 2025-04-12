@@ -16,11 +16,13 @@ public class Functions {
             double p1= (x_plus-x_minus);
             double p2 = (x_plus+x_minus);
             double output =p1/p2;
+
+            if(Double.isInfinite(p1)||Double.isInfinite(p2)) return 1;
             if(Double.isNaN(output)){
                 System.out.println("tanH function NaN");
             }
 
-            if(Double.isInfinite(p1)||Double.isInfinite(p2)) return 1;
+
             return output;
         }
 

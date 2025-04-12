@@ -59,14 +59,16 @@ public class Layer implements Serializable{
 
         if(last_layer){
             for (int i = 0;i < neuron_number;i++) {
-                /*
-                double da = neurons[i].getActivationDerivative(neuron_values);//output neuron on activationFunction
-                //output and correct layer have the same number of neurons
-                double dc = neurons[i].getCostDerivative(neurons_next[i].neuron_value);//activationFunction on cost
-                neurons[i].delta += (da * dc)/batch_size; //we add to delta and don't reset it!! -> for batches
-                 */
-                neurons[i].delta = (neurons[i].neuron_value_output - neurons_next[i].neuron_value)/batch_size;
+                if(functions.costFunction == Neural_Network.Functions.Cost.Functions.cceFunction && functions.activationFunctionO == Neural_Network.Functions.Activation.Functions.softMaxFunction){
+                    neurons[i].delta = (neurons[i].neuron_value_output - neurons_next[i].neuron_value)/batch_size;//derivative of softmax and categorical cross
+                }
+                else{
+                    double da = neurons[i].getActivationDerivative(neuron_values);//output neuron on activationFunction
+                    //output and correct layer have the same number of neurons
+                    double dc = neurons[i].getCostDerivative(neurons_next[i].neuron_value);//activationFunction on cost
+                    neurons[i].delta += (da * dc)/batch_size; //we add to delta and don't reset it!! -> for batches
 
+                }
 
                 if (neurons[i].delta>1000 || neurons[i].delta<-1000){
                     System.out.println("as");
@@ -79,7 +81,6 @@ public class Layer implements Serializable{
                 for (int k = 0; k < neurons_next.length; k++) {
                     neurons[i].delta += da * neurons[i].weights[k] * neurons_next[k].delta;
                 }
-
 
                 if (neurons[i].delta>1000|| neurons[i].delta<-1000){
                     System.out.println("as");
