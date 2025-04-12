@@ -50,18 +50,7 @@ public class Layer implements Serializable{
         for(int i = 0; i < neuron_next_number; i++){
             //we pass all calculated neuron values for softmax and functions like that (they calculate average/sum...)
             neurons_next[i].setNeuron_value(new_neuron_next_values[i], new_neuron_next_values);
-            if(neurons_next[i].neuron_value > 1000 || neurons_next[i].neuron_value < -1000 || neurons_next[i].neuron_value_output > 1000 || neurons_next[i].neuron_value_output< -1000 ){
-                //System.out.println("neuron values to big!!");
-            }
-            if((neurons_next[i].neuron_value_output < 0.0005 && neurons_next[i].neuron_value_output > 0) || (neurons_next[i].neuron_value < 0.0005 && neurons_next[i].neuron_value >0)){
-                //System.out.println("neuron values to low!! POSITIVE");
-            }
-            if((neurons_next[i].neuron_value_output > -0.0001 && neurons_next[i].neuron_value_output < 0) || (neurons_next[i].neuron_value > -0.0001 && neurons_next[i].neuron_value < 0)){
-                //System.out.println("neuron values to low!! NEGATIVE");
-            }
-
         }
-
     }
 
 
@@ -135,10 +124,10 @@ public class Layer implements Serializable{
         }
     }
 
-    public void setNeurons(double[] neuron_values){
+    public void setNeurons(double[] neuron_values, boolean bias){
         for(int i = 0; i<neuron_number;i++){
-            //sets unactivated and activated neuron value
-            neurons[i].setNeuron_value(neuron_values[i]);
+            //sets unactivated and activated neuron value and adds bias to neuron value
+            neurons[i].setNeuron_value(neuron_values[i]+(bias?neurons[i].bias:0));
 
         }
     }

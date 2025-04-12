@@ -1,5 +1,7 @@
 package Neural_Network;
 
+import Datasets.Batch;
+
 import java.io.Serializable;
 
 public class Network implements Cloneable, Serializable {
@@ -45,6 +47,7 @@ public class Network implements Cloneable, Serializable {
             layers[i].neurons = n.layers[i].neurons.clone();
         }
     }
+
     public void makeLayers(){
         //if there is 0 hidden layers we only need to set up input and output layers
 
@@ -60,7 +63,7 @@ public class Network implements Cloneable, Serializable {
 
 
     public double[] feedNetwork(double[] input_neuron_values){
-        input_layer.setNeurons(input_neuron_values);
+        input_layer.setNeurons(input_neuron_values, true);
 
         for (int i = 0; i<layer_number;i++) {
             if(layers[i]==output_layer)break;
@@ -69,46 +72,26 @@ public class Network implements Cloneable, Serializable {
         return output_layer.getNeuron_values_output();
     }
 
+    public void learnNetwork(Batch batch){
+        double[][] expected_neuron_values_batch = batch.results;
 
-    public void learnNetwork(double[] input_neuron_values, double[] expected_neuron_values){
-        //forward-propagation
-        feedNetwork(input_neuron_values);
 
-        output_layer.setNextNeurons(expected_neuron_values);//set last neurons as expected values
-        //back-propagation
-        for (int i = layer_number-1; i >= 0; i--){
-            layers[i].calculateDeltas(1);
-            layers[i].calculateWeightsBiases(learn_rate);
-        }
-    }
+        for (int i = 0; i < batch.size; i++) {
+            double[] predicted_values = feedNetwork(batch.data[i]);
 
-    public double[] learnNetwork(double[][] input_neuron_values_batch, double[][] expected_neuron_values_batch){
-        double batch_size = input_neuron_values_batch.length;
-        double batch_cost = 0;
-        int count = 0;
+            batch.checkPredictions(predicted_values, i);
 
-        for (int i = 0; i < batch_size; i++) {
-            double[] out = feedNetwork(input_neuron_values_batch[i]);
-            if(out[0]>out[1]){
-                if(expected_neuron_values_batch[i][0]==1)count++;
-            }else if(out[0]<out[1]){
-                if(expected_neuron_values_batch[i][0]==0)count++;
-            }
-            //System.out.println(Arrays.toString());//forward-propagation
             output_layer.setNextNeurons(expected_neuron_values_batch[i]);//set last neurons as expected values
-            output_layer.calculateDeltas(batch_size);
-            batch_cost += output_layer.calculateCost(expected_neuron_values_batch[i])/batch_size;
+            output_layer.calculateDeltas(batch.size); //calculates average delta in whole batch
+            batch.cost += output_layer.calculateCost(expected_neuron_values_batch[i])/batch.size; //calculates average cost in whole batch
         }
-        output_layer.calculateWeightsBiases(learn_rate);
-
-
+        output_layer.calculateWeightsBiases(learn_rate); //with average deltas calculates weights on output layer
 
         //back-propagation
         for (int i = layer_number-2; i >= 0; i--){
-            layers[i].calculateDeltas(1);
-            layers[i].calculateWeightsBiases(learn_rate);
+            layers[i].calculateDeltas(1); //calculates deltas on all others layers (batch_size 1 because not average)
+            layers[i].calculateWeightsBiases(learn_rate); //
         }
-        return new double[]{batch_cost, count};
     }
 
     public double calculateCost(double[] expected_neuron_values) {

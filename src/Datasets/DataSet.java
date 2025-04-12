@@ -13,8 +13,6 @@ public class DataSet {
     public double[][] results;
 
     public int batch_size;
-    public double[][] batch_data;
-    public double[][] batch_results;
 
     public static int min = -10;
     public static int max = 10;
@@ -47,15 +45,13 @@ public class DataSet {
         System.out.println();
     }
 
-    public void setRandomBatch(){
-        if (batch_size==dataset_length){
-            batch_data = data;
-            batch_results = results;
-            return;
-        }
+    public Batch setRandomBatch(){
+        Batch batch = new Batch(batch_size, input_neuron_number, output_neuron_number);
 
-        batch_data = new double[batch_size][input_neuron_number];
-        batch_results = new double[batch_size][output_neuron_number];
+        if (batch_size==dataset_length){
+            batch.setBatch(data, results);
+            return batch;
+        }
 
         LinkedList<Integer> already_used_r = new LinkedList<Integer>();
 
@@ -63,36 +59,33 @@ public class DataSet {
             int r;
             while(already_used_r.contains(r = getRanInt(0, dataset_length)));
 
-            batch_data[i] = data[r].clone();
-            batch_results[i] = results[r].clone();
-
+            batch.setBatchI(data[r].clone(), results[r].clone(), i);
             already_used_r.add(r);
         }
-
+        return batch;
     }
 
     public double[][] getRandomData(){
         int rand_d = getRanInt(0, dataset_length);
-
         return new double[][]{data[rand_d], results[rand_d]};
     }
 
     public static double[] getPointFxIn(){
-        double x = getRanInt(min, max);
-        double y = getRanInt(min, max);
+        double x = getRanDouble(min, max);
+        double y = getRanDouble(min, max);
         while(fx(x,y)[0]!=1){
-            x = getRanInt(min, max);
-            y = getRanInt(min, max);
+            x = getRanDouble(min, max);
+            y = getRanDouble(min, max);
         }
         return new double[]{x, y, x*x, y*y};
 
     }
     public static double[] getPointFxOut(){
-        double x = getRanInt(min, max);
-        double y = getRanInt(min, max);
+        double x = getRanDouble(min, max);
+        double y = getRanDouble(min, max);
         while(fx(x,y)[0]!=0){
-            x = getRanInt(min, max);
-            y = getRanInt(min, max);
+            x = getRanDouble(min, max);
+            y = getRanDouble(min, max);
         }
         return new double[]{x, y, x*x, y*y};
     }
@@ -120,6 +113,7 @@ public class DataSet {
             results[i] = temp_r;
         }
     }
+
     public static int getRanInt(int min, int max){
         return min + (int)(Math.random() * ((max - min)));
     }

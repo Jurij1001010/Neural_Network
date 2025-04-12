@@ -31,15 +31,19 @@ public class Neuron{
     public Neuron(int neuron_before_number, int neuron_next_number) {
         this.neuron_before_number = neuron_before_number;
         this.neuron_next_number = neuron_next_number;
+        weights = new double[neuron_next_number];
 
+        setWeightsToOne();
         if(neuron_next_number!=0) {
-            weights = new double[neuron_next_number];
-
             setNewWeights();
-            //setNewBias();
+            setNewBias();
         }
     }
-
+    public void setWeightsToOne(){
+        for (int i = 0; i < neuron_next_number; i++){
+            weights[i] = 1;
+        }
+    }
 
     public void setNewWeights(){
         double max = Math.sqrt((double) 1 /(neuron_before_number+neuron_next_number));
