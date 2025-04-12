@@ -97,7 +97,7 @@ public class Network implements Cloneable, Serializable {
             //System.out.println(Arrays.toString());//forward-propagation
             output_layer.setNextNeurons(expected_neuron_values_batch[i]);//set last neurons as expected values
             output_layer.calculateDeltas(batch_size);
-            batch_cost += output_layer.calculateCost(expected_neuron_values_batch[i]);
+            batch_cost += output_layer.calculateCost(expected_neuron_values_batch[i])/batch_size;
         }
         output_layer.calculateWeightsBiases(learn_rate);
 
@@ -108,7 +108,7 @@ public class Network implements Cloneable, Serializable {
             layers[i].calculateDeltas(1);
             layers[i].calculateWeightsBiases(learn_rate);
         }
-        return new double[]{batch_cost/batch_size, count};
+        return new double[]{batch_cost, count};
     }
 
     public double calculateCost(double[] expected_neuron_values) {

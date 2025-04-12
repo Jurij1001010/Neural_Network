@@ -20,7 +20,7 @@ public class Functions {
                 System.out.println("tanH function NaN");
             }
 
-            if(Double.isInfinite(input)) return 1;
+            if(Double.isInfinite(p1)||Double.isInfinite(p2)) return 1;
             return output;
         }
 

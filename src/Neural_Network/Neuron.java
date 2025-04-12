@@ -13,7 +13,7 @@ public class Neuron{
     public int neuron_before_number;
     public int neuron_next_number; // how many weights
     public double[] weights;
-    public double bias;
+    public double bias = 0;
 
     public double delta = 0;
 
@@ -36,7 +36,7 @@ public class Neuron{
             weights = new double[neuron_next_number];
 
             setNewWeights();
-            setNewBias();
+            //setNewBias();
         }
     }
 
@@ -44,16 +44,9 @@ public class Neuron{
     public void setNewWeights(){
         double max = Math.sqrt((double) 1 /(neuron_before_number+neuron_next_number));
         double min = -max;
-        /*
-        for (int i = 0; i < neuron_next_number; i++){
-            double randomNum = -weight_limit + (weight_limit + weight_limit) * rand.nextDouble();
-            weights[i] = randomNum;
-        }
-        */
         for (int i = 0; i < neuron_next_number; i++){
             double randomNum = min + ((max - min) * rand.nextDouble());
             weights[i] = randomNum;
-            //System.out.println("a = "+randomNum);
         }
 
     }

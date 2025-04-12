@@ -1,3 +1,5 @@
+package Datasets;
+
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -82,7 +84,7 @@ public class DataSet {
             x = getRanInt(min, max);
             y = getRanInt(min, max);
         }
-        return new double[]{x, y};
+        return new double[]{x, y, x*x, y*y};
 
     }
     public static double[] getPointFxOut(){
@@ -92,15 +94,15 @@ public class DataSet {
             x = getRanInt(min, max);
             y = getRanInt(min, max);
         }
-        return new double[]{x, y};
+        return new double[]{x, y, x*x, y*y};
     }
 
 
     public static double[] fx(double x, double y){
-        boolean f = y>=5;
+        //boolean f = y>=5;
         //boolean f = (2*x-5)<=y && y<=(2*x+5);
 
-        //boolean f = x*x+y*y <25;
+        boolean f = x*x+y*y <25; // circle
 
         return f?new double[]{1, 0}:new double[]{0, 1};
     }
