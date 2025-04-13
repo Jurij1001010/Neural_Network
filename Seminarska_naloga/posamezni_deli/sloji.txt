@@ -1,0 +1,9 @@
+Sloji (angl. layers) so osnovni gradniki umetnih nevronskih mrež. Vsak sloj je sestavljen iz določenega števila nevronov (umetnih enot), ki sodelujejo pri obdelavi in transformaciji vhodnih podatkov skozi mrežo. Sloji skupaj tvorijo strukturo modela in omogočajo mreži, da se nauči zapletenih funkcij, ki povezujejo vhodne podatke z izhodi.
+
+Nevronska mreža je običajno organizirana kot zaporedje slojev, kjer vsak sloj sprejme vhod iz prejšnjega sloja (ali neposredno iz podatkov v primeru vhodnega sloja), opravi izračune in rezultate posreduje naslednjemu sloju. Ta postopek se nadaljuje do izhodnega sloja, ki poda končno napoved ali rezultat.
+Sloje delimo v tri skupine:
+¸\begin{itemize}
+    \item Vhodni sloj (Input layer) Predstavlja prvi sloj mreže. Njegov namen je sprejem surovih vhodnih podatkov (npr. piksli slike, vrednosti senzorjev, značilnosti iz tabele). Običajno ne izvaja nobenih transformacij, le posreduje podatke naprej.
+    \item Skriti sloji (Hidden layers) So vmesni sloji med vhodnim in izhodnim slojem. Vsak nevron v teh slojih izvaja uteženo vsoto svojih vhodov, nato uporabi aktivacijsko funkcijo (npr. ReLU, sigmoid). Z več skritimi sloji lahko mreža modelira kompleksne, nelinearne odnose v podatkih. Omogočajo hierarhično učenje – npr. v primeru slik: nižje plasti prepoznavajo robove, višje pa kompleksne oblike.
+    \item Izhodni sloj (Output layer) Zadnji sloj mreže, ki poda končni rezultat. Njegova struktura in aktivacijska funkcija sta odvisni od naloge: Regresija: linearni izhod. Binarna klasifikacija: en nevron s sigmoidno funkcijo. Večklasna klasifikacija: več nevronov s softmax funkcijo.
+\end{itemize}
