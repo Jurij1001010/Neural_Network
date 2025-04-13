@@ -70,9 +70,6 @@ public class Neuron{
         this.neuron_value = neuron_value;
         //needs to get all neurons values for calculating activations that are avg. or sum ...
         this.neuron_value_output = activationFunction.execute(neuron_value, neuron_values);
-
-
-
     }
 
 

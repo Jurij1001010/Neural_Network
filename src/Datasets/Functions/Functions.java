@@ -20,6 +20,22 @@ public class Functions {
             return rand.nextDouble()>0.5?Math.sin(a)*r:-Math.sin(a)*r;
         }
     };
+    public static Function circle1 = new Function() {
+        public final int output_neuron_number = 2;
+        private int r = 2;
+        @Override
+        public boolean execute(double x, double y) {
+            boolean f = x*x+y*y == r*r;
+
+            return f;
+        }
+
+        @Override
+        public double execute(double x) {
+            double a =Math.acos(x/r);
+            return rand.nextDouble()>0.5?Math.sin(a)*r:-Math.sin(a)*r;
+        }
+    };
 
     public static Function diagonal = new Function() {
         public final int output_neuron_number = 2;
