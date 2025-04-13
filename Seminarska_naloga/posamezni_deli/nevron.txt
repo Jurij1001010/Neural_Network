@@ -1,0 +1,9 @@
+
+Nevron je osnovni del mreže, navihnjeni so po nevronih, ki tvorijo človeški živčni sistem. Vsak nevron prejme več vhodov $x_1, x_2, ..., x_n$, ki jih uteži $w_1, w_2, ..., w_n$ utežijo(povezave med nevroni iz prejšne plasti), ter doda pristranskost (bias) $b$. Vrednost oz. izhod  $a$ nevrona se nato izračuna kot:
+\[
+z = \sum_{i=1}^n w_i x_i + b
+\]
+\[
+a = \phi(z)
+\]
+kjer je $\phi$ aktivacijska funkcija.

@@ -1,0 +1,3 @@
+Kaj sploh je nevronska mreža? Nevronska mreža je računalniški model, ki posnema delovanje človeških možganov. Gre za sestav kompleksnih matematičnih modelov, zasnovanih tako, da prepoznajo vzorce v podatkih. Temeljijo na strukturi in delovanju nevronov v človeškem živčnem sistemu, vendar so zasnovane za obdelavo podatkov v računalnikih. 
+
+Nevronska mreža se uči s pomočjo učenja na podlagi primerov, kjer se podatki uporabljajo za usmerjanje in prilagoditev teže povezav med nevtroni. Ta postopek se imenuje trening mreže (backpropogation). Med treningom mreža ponavlja napovedi na osnovi vhodnih podatkov, primerja jih s pričakovanimi rezultati in nato prilagodi teže povezav tako, bo pri naslednjem testu bolj točno pokazal na željen rezultat.
