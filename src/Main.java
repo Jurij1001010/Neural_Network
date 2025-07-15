@@ -17,11 +17,11 @@ public class Main {
 
 
     public static void main(String[] args) {
-        DataSet data_set = new DataSet(10000,  new Input[]{x, y, xy, xPow2, yPow2, sum, sinX, sinY}, new Function[]{circle, polinom}, 100);
+        DataSet data_set = new DataSet(10000,  new Input[]{x, y, xy, xPow2, yPow2, sum, sinX, sinY}, new Function[]{racional_function, polinom, log}, 100);
 
         data_set.createDataSet();
 
-        n = new Network(new int[]{data_set.input_neuron_number,8,6,4,  data_set.output_neuron_number}, functions);
+        n = new Network(new int[]{data_set.input_neuron_number,10,8,8,10,  data_set.output_neuron_number}, functions);
         n.setLearn_rate(0.03);
 
 

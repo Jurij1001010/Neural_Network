@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class Functions {
     static Random rand = new Random();
+    
     public static Function circle = new Function() {
         public final int output_neuron_number = 2;
         private int r = 4;
